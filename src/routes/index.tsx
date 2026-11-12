@@ -9,6 +9,11 @@ import { CatalogFilters } from "@/components/store/CatalogFilters";
 import { LavaLamp } from "@/components/store/LavaLamp";
 import { VintageryFm } from "@/components/store/VintageryFm";
 import { collectSizes, filterProducts } from "@/lib/catalog-filters";
+import { SHARE_IMAGE, SITE_URL } from "@/lib/site";
+
+// Shown under the title in search results and link previews (Telegram, Viber, Facebook…).
+const SHARE_DESCRIPTION =
+  "Вінтажний одяг 70-х, 80-х і 90-х, відібраний вручну. Кожна річ — у єдиному екземплярі. Поставте платівку й знайдіть свою.";
 
 type CatalogSearch = { size?: string | undefined; price?: string | undefined };
 
@@ -16,18 +21,21 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Vintagery — вінтажний одяг з історією" },
-      {
-        name: "description",
-        content:
-          "Куртки, светри, сукні та денім з минулих десятиліть. Кожна річ відібрана вручну та існує в єдиному екземплярі.",
-      },
+      { name: "description", content: SHARE_DESCRIPTION },
+      { property: "og:site_name", content: "Vintagery" },
       { property: "og:title", content: "Vintagery — вінтажний одяг з історією" },
-      {
-        property: "og:description",
-        content: "Кожна річ відібрана вручну та існує в єдиному екземплярі.",
-      },
+      { property: "og:description", content: SHARE_DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: `${SITE_URL}/` },
+      { property: "og:locale", content: "uk_UA" },
+      { property: "og:image", content: SHARE_IMAGE.url },
+      { property: "og:image:width", content: String(SHARE_IMAGE.width) },
+      { property: "og:image:height", content: String(SHARE_IMAGE.height) },
+      { property: "og:image:alt", content: SHARE_IMAGE.alt },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Vintagery — вінтажний одяг з історією" },
+      { name: "twitter:description", content: SHARE_DESCRIPTION },
+      { name: "twitter:image", content: SHARE_IMAGE.url },
     ],
   }),
   validateSearch: (search: Record<string, unknown>): CatalogSearch => ({

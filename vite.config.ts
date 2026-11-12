@@ -13,6 +13,9 @@ import tsConfigPaths from "vite-tsconfig-paths";
 export default defineConfig(({ command, mode }) => {
   // Expose VITE_* variables from .env files to both client and server bundles.
   const env = loadEnv(mode, process.cwd(), "VITE_");
+  // On Vercel, the production domain becomes the site URL used for share previews.
+  const vercelDomain = process.env["VERCEL_PROJECT_PRODUCTION_URL"];
+  if (!env["VITE_SITE_URL"] && vercelDomain) env["VITE_SITE_URL"] = `https://${vercelDomain}`;
   const envDefine = Object.fromEntries(
     Object.entries(env).map(([key, value]) => [`import.meta.env.${key}`, JSON.stringify(value)]),
   );
