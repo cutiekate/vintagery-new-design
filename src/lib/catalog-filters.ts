@@ -46,7 +46,10 @@ export function priceInRange(amount: number, rangeId: string): boolean {
   return range.min === 0 ? amount <= range.max : amount > range.min && amount <= range.max;
 }
 
-export function filterProducts(products: ShopifyProduct[], filters: CatalogFilters): ShopifyProduct[] {
+export function filterProducts(
+  products: ShopifyProduct[],
+  filters: CatalogFilters,
+): ShopifyProduct[] {
   return products.filter((p) => {
     let variants = availableVariants(p);
     if (filters.size) {

@@ -54,7 +54,9 @@ describe("catalog filters", () => {
   });
 
   it("'Від 5 000 грн' keeps the 6 500 грн coat, not the 1 500 грн jacket", () => {
-    expect(filterProducts([jacket, coat], { price: "over-5000" }).map((p) => p.node.id)).toEqual(["coat"]);
+    expect(filterProducts([jacket, coat], { price: "over-5000" }).map((p) => p.node.id)).toEqual([
+      "coat",
+    ]);
   });
 
   it("size and price together must both match", () => {

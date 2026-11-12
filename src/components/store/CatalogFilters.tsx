@@ -10,7 +10,15 @@ interface Props {
   onChange: (next: { size?: string | undefined; price?: string | undefined }) => void;
 }
 
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
@@ -52,9 +60,13 @@ export function CatalogFilters({ sizes, size, price, onChange }: Props) {
       >
         Фільтри
         {activeCount > 0 && (
-          <span className="rounded-full bg-mustard px-1.5 text-xs text-mustard-foreground">{activeCount}</span>
+          <span className="rounded-full bg-mustard px-1.5 text-xs text-mustard-foreground">
+            {activeCount}
+          </span>
         )}
-        <ChevronDown className={cn("h-4 w-4 transition-transform duration-300", open && "rotate-180")} />
+        <ChevronDown
+          className={cn("h-4 w-4 transition-transform duration-300", open && "rotate-180")}
+        />
       </button>
 
       <div
