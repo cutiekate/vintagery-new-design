@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,6 +12,7 @@ import { ShoppingBag, Minus, Plus, X, ArrowUpRight, Loader2 } from "lucide-react
 import { toast } from "sonner";
 import { MAX_QUANTITY_PER_ITEM, useCartStore } from "@/stores/cartStore";
 import { formatPrice } from "@/lib/shopify";
+import { VinylRecord } from "./VinylRecord";
 
 function itemsLabel(n: number) {
   const mod10 = n % 10;
@@ -33,6 +34,20 @@ export function CartDrawer() {
   }, [isOpen, syncCart]);
 
   const totalItems = mounted ? items.reduce((sum, i) => sum + i.quantity, 0) : 0;
+
+  // Spin the record whenever the count goes up — but not when the saved cart first loads.
+  const [spinKey, setSpinKey] = useState(0);
+  const prevTotal = useRef<number | null>(null);
+  useEffect(() => {
+    if (!mounted) return;
+    if (prevTotal.current !== null && totalItems > prevTotal.current) setSpinKey((k) => k + 1);
+    prevTotal.current = totalItems;
+  }, [mounted, totalItems]);
+  useEffect(() => {
+    if (spinKey === 0) return;
+    const t = setTimeout(() => setSpinKey(0), 1400);
+    return () => clearTimeout(t);
+  }, [spinKey]);
   const totalPrice = items.reduce((sum, i) => sum + parseFloat(i.price.amount) * i.quantity, 0);
   const currency = items[0]?.price.currencyCode ?? "UAH";
 
@@ -56,7 +71,11 @@ export function CartDrawer() {
           aria-label="Відкрити кошик"
           className="relative inline-flex h-10 items-center gap-2 px-2 text-foreground transition-colors hover:text-primary"
         >
-          <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
+          {spinKey > 0 ? (
+            <VinylRecord key={spinKey} className="vinyl-spin h-5 w-5" />
+          ) : (
+            <ShoppingBag className="h-5 w-5" strokeWidth={1.5} />
+          )}
           <span className="eyebrow hidden sm:inline">Кошик</span>
           {totalItems > 0 && (
             <span className="absolute -right-1 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">

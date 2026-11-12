@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { SiteHeader } from "@/components/store/SiteHeader";
 import { SiteFooter } from "@/components/store/SiteFooter";
+import { NowPlaying } from "@/components/store/NowPlaying";
 import { useCartSync } from "@/hooks/useCartSync";
 
 function NotFoundComponent() {
@@ -82,10 +83,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Vintagery — вінтажний одяг з історією" },
-      { name: "description", content: "Vintagery — інтернет-магазин вінтажного одягу, відібраного вручну." },
+      {
+        name: "description",
+        content: "Vintagery — інтернет-магазин вінтажного одягу, відібраного вручну.",
+      },
       { name: "author", content: "Vintagery" },
       { property: "og:title", content: "Vintagery — вінтажний одяг з історією" },
-      { property: "og:description", content: "Інтернет-магазин вінтажного одягу, відібраного вручну." },
+      {
+        property: "og:description",
+        content: "Інтернет-магазин вінтажного одягу, відібраного вручну.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -137,6 +144,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
+      <NowPlaying />
       <Toaster position="top-center" />
     </QueryClientProvider>
   );

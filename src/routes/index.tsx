@@ -6,6 +6,8 @@ import detailsImg from "@/assets/vintage-details.jpg";
 import { productsQueryOptions } from "@/lib/product-queries";
 import { ProductCard } from "@/components/store/ProductCard";
 import { CatalogFilters } from "@/components/store/CatalogFilters";
+import { LavaLamp } from "@/components/store/LavaLamp";
+import { VintageryFm } from "@/components/store/VintageryFm";
 import { collectSizes, filterProducts } from "@/lib/catalog-filters";
 
 type CatalogSearch = { size?: string | undefined; price?: string | undefined };
@@ -56,8 +58,10 @@ function Index() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-12 md:grid-cols-[1.1fr_1fr] md:px-10 md:pb-24 md:pt-16">
+      <section className="relative overflow-clip">
+        <LavaLamp className="opacity-55" />
+        {/* Side by side only from lg: narrower, the arch is squeezed and its rings run into the text */}
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-12 md:px-10 md:pb-24 md:pt-16 lg:grid-cols-[1.1fr_1fr]">
           <div className="relative z-10">
             <p className="eyebrow inline-block animate-rise rounded-full bg-mustard px-4 py-2 text-mustard-foreground">
               Вінтажний одяг · з 1970-х до сьогодні
@@ -83,8 +87,15 @@ function Index() {
             </a>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md animate-rise" style={{ animationDelay: "160ms" }}>
-            <div className="sunset-rings absolute -inset-x-20 bottom-0 top-1/4" aria-hidden />
+          <div
+            className="relative mx-auto w-[calc(100%-5rem)] max-w-md animate-rise sm:w-full"
+            style={{ animationDelay: "160ms" }}
+          >
+            {/* Rainbow bands following the arch's outline, cut flat at its base. On phones the
+                arch is narrowed so the bands fit on screen. */}
+            <div className="absolute -inset-x-20 -top-20 bottom-0 overflow-hidden" aria-hidden>
+              <div className="arch-rainbow absolute inset-x-20 bottom-0 top-20 rounded-t-full" />
+            </div>
             <div className="relative overflow-hidden rounded-t-full border-4 border-ink shadow-card">
               <img
                 src={heroImg}
@@ -118,7 +129,9 @@ function Index() {
       <section id="catalog" className="mx-auto max-w-7xl scroll-mt-16 px-5 py-20 md:px-10 md:py-28">
         <div className="mb-12 flex flex-col justify-between gap-4 border-b-2 border-ink pb-6 md:flex-row md:items-end">
           <div>
-            <p className="eyebrow inline-block rounded-full bg-mustard px-4 py-2 text-mustard-foreground">Колекція</p>
+            <p className="eyebrow inline-block rounded-full bg-mustard px-4 py-2 text-mustard-foreground">
+              Колекція
+            </p>
             <h2 className="mt-2 text-4xl md:text-5xl">
               Нові <em>надходження</em>
             </h2>
@@ -167,6 +180,8 @@ function Index() {
         )}
       </section>
 
+      <VintageryFm />
+
       {/* Story */}
       <section id="story" className="scroll-mt-20 overflow-hidden bg-secondary">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 md:grid-cols-2 md:px-10 md:py-28">
@@ -179,14 +194,16 @@ function Index() {
             className="aspect-[4/5] w-full rounded-t-full border-4 border-ink object-cover shadow-card"
           />
           <div className="relative z-10">
-            <p className="eyebrow inline-block rounded-full bg-mustard px-4 py-2 text-mustard-foreground">Про Vintagery</p>
+            <p className="eyebrow inline-block rounded-full bg-mustard px-4 py-2 text-mustard-foreground">
+              Про Vintagery
+            </p>
             <h2 className="mt-3 text-4xl leading-[1.05] md:text-5xl">
               Мода, яка <em>не минає</em>
             </h2>
             <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-              Ми шукаємо одяг, створений з любов’ю до матеріалу та крою: вовна, що гріє десятиліттями,
-              шкіра, що з роками стає тільки кращою, денім із власним характером. Кожну річ
-              перевіряємо, чистимо та даємо їй друге життя.
+              Ми шукаємо одяг, створений з любов’ю до матеріалу та крою: вовна, що гріє
+              десятиліттями, шкіра, що з роками стає тільки кращою, денім із власним характером.
+              Кожну річ перевіряємо, чистимо та даємо їй друге життя.
             </p>
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-4">
               {[

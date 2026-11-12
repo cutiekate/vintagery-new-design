@@ -169,6 +169,36 @@
   }
 }
 
+/* Everywhere the browser would show the pointing hand, show ours instead: the familiar hand
+   wearing a jewelled ring, a band and two gold bangles. Unlayered on purpose so it also beats
+   utility classes such as cursor-pointer. Clicks at the fingertip; falls back to the system
+   hand. Disabled controls keep their own cursor. */
+a[href],
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="menuitemcheckbox"],
+[role="menuitemradio"],
+[role="option"],
+[role="checkbox"],
+[role="radio"],
+[role="switch"],
+summary,
+label[for],
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+.cursor-pointer:not(:disabled) {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='26' viewBox='0 0 22 26'><g stroke='%234a2c22' stroke-width='0.9' stroke-linejoin='round' stroke-linecap='round' fill='%23fff6e6'><rect x='6.4' y='0.6' width='3.8' height='12' rx='1.9'/><path d='M5.2 13.4c-1.2-1.3-3-1-3 .3 0 1.2 1.7 3.6 3.2 5.3'/><rect x='7.2' y='18' width='9.4' height='6.6' rx='1.2'/><rect x='5' y='10.4' width='13.8' height='9.4' rx='3.6'/><rect x='10' y='7.2' width='3.2' height='6.2' rx='1.6'/><rect x='13' y='8.2' width='3' height='5.6' rx='1.5'/><rect x='15.8' y='9.6' width='2.8' height='5' rx='1.4'/></g><g stroke='%234a2c22' stroke-width='0.55'><rect x='6.1' y='7.2' width='4.4' height='1.25' rx='0.6' fill='%23d6a138'/><circle cx='8.3' cy='7' r='1.05' fill='%23b8502a'/><rect x='12.8' y='10.6' width='3.4' height='0.95' rx='0.45' fill='%23d6a138'/><rect x='6.9' y='19.7' width='10' height='1.3' rx='0.6' fill='%23d6a138'/><rect x='6.9' y='21.9' width='10' height='1.3' rx='0.6' fill='%23d6a138'/></g><g fill='%23b8502a'><circle cx='9.4' cy='22.55' r='0.55'/><circle cx='11.9' cy='22.55' r='0.55'/><circle cx='14.4' cy='22.55' r='0.55'/></g><circle cx='7.95' cy='6.65' r='0.32' fill='%23ffffff' opacity='.9'/></svg>")
+      8 1,
+    pointer;
+}
+
 /* Film-grain overlay for archival paper feel */
 @utility grain {
   position: relative;
@@ -201,6 +231,107 @@
   background: var(--sunset-rings);
 }
 
+/* 70s rainbow hugging an arch: spread box-shadows follow the element's rounded top, so each
+   band runs parallel to the arch. --band sets the band width (cream gaps are 40% of it);
+   the whole rainbow reaches 6.4 × --band beyond the arch. */
+@utility arch-rainbow {
+  --band: 6px;
+  box-shadow:
+    0 0 0 calc(var(--band) * 1) var(--mustard),
+    0 0 0 calc(var(--band) * 1.4) var(--background),
+    0 0 0 calc(var(--band) * 2.4) var(--sunset),
+    0 0 0 calc(var(--band) * 2.8) var(--background),
+    0 0 0 calc(var(--band) * 3.8) var(--primary),
+    0 0 0 calc(var(--band) * 4.2) var(--background),
+    0 0 0 calc(var(--band) * 6.4) var(--ink);
+  /* Wider bands where there's room; narrower beside the text column at lg. */
+  @media (min-width: 640px) {
+    --band: 9px;
+  }
+  @media (min-width: 1024px) {
+    --band: 6px;
+  }
+  @media (min-width: 1280px) {
+    --band: 10px;
+  }
+}
+
+/* Lava lamp: the goo filter fuses blobs; each blob rises, stretches and sinks back */
+@utility lava-goo {
+  filter: url(#lava-goo);
+}
+
+@utility lava-blob {
+  animation-name: lava-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* Satin mother-of-pearl inside each blob, like an old pearl button: a slowly turning, muted
+   warm sheen blended into the wax (::before) and a broad soft glow (::after) — no glossy
+   highlights. Lives on a child so it animates independently of the blob's float; stagger
+   it with --pearl-delay. */
+@utility lava-pearl {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  &::before {
+    /* dusty rose, champagne, sage, cream */
+    background: conic-gradient(
+      from var(--pearl-angle),
+      #e7b4a4,
+      #e6cfa6,
+      #bcc6a2,
+      #f1e2c4,
+      #e7b4a4
+    );
+    mix-blend-mode: soft-light;
+    opacity: 0.85;
+    animation: pearl-turn 20s linear infinite;
+    animation-delay: var(--pearl-delay, 0s);
+  }
+  &::after {
+    background: radial-gradient(
+      ellipse at 38% 32%,
+      rgb(255 244 226 / 0.3) 0,
+      rgb(255 244 226 / 0.08) 35%,
+      transparent 60%
+    );
+  }
+}
+
+/* Film grain laid over the wax (clipped to the blobs by the goo filter) for a printed,
+   70s-poster texture. */
+@utility lava-grain {
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Small record that keeps turning while music plays */
+@utility vinyl-turn {
+  animation: vinyl-turn 1.8s linear infinite;
+}
+
+/* Equaliser bar; stagger with animation-delay */
+@utility eq-bar {
+  transform-origin: 50% 100%;
+  animation: eq-bounce 0.9s ease-in-out infinite;
+}
+
+/* A cart icon briefly becomes a spinning record when something is added */
+@utility vinyl-spin {
+  animation: vinyl-spin 1.3s cubic-bezier(0.25, 0.8, 0.3, 1) both;
+}
+
 @utility shadow-card {
   box-shadow: var(--shadow-card);
 }
@@ -222,5 +353,76 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes vinyl-spin {
+  0% {
+    transform: scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    transform: scale(1.15) rotate(60deg);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1) rotate(160deg);
+  }
+  100% {
+    transform: scale(1) rotate(720deg);
+  }
+}
+
+@property --pearl-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes pearl-turn {
+  to {
+    --pearl-angle: 360deg;
+  }
+}
+
+@keyframes lava-float {
+  0%,
+  100% {
+    transform: translate(0, 12vmax) scale(1, 1);
+  }
+  30% {
+    transform: translate(2vw, -30vh) scale(0.85, 1.2);
+  }
+  55% {
+    transform: translate(-1vw, -62vh) scale(1.1, 0.9);
+  }
+  80% {
+    transform: translate(1vw, -25vh) scale(0.95, 1.1);
+  }
+}
+
+@keyframes vinyl-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes eq-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl-spin,
+  .vinyl-turn,
+  .lava-blob,
+  .lava-pearl::before,
+  .eq-bar {
+    animation: none;
   }
 }
