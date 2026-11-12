@@ -34,8 +34,10 @@ export default defineConfig(({ command, mode }) => {
           },
         },
       }),
-      // Nitro packages the production server; it is only needed for builds.
-      ...(command === "build" ? [nitro({ preset: "cloudflare-module" })] : []),
+      // Nitro packages the production server; it is only needed for builds. It detects the host
+      // it builds on (e.g. Vercel) and falls back to a Cloudflare Worker elsewhere;
+      // NITRO_PRESET overrides both.
+      ...(command === "build" ? [nitro({ defaultPreset: "cloudflare-module" })] : []),
       viteReact(),
     ],
     resolve: {
